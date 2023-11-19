@@ -1,2 +1,2 @@
 require "spec"
-require "../src/rrule-crystal"
+require "../src/rrule"
