@@ -11,27 +11,31 @@ module RRule
     getter count : Int64?
     # until
     getter til : Time?
-    getter by_set_pos : Array(Int64)
-    getter by_month_day : Array(Int64)
-    getter by_year_day : Array(Int64)
-    getter by_week_no : Array(Int64)
-    getter by_hour : Array(Int64)
-    getter by_minute : Array(Int64)
-    getter by_second : Array(Int64)
+    getter by_week_day : Array(Weekday)
+    getter by_month : Array(Int8)
+    getter by_set_pos : Array(Int32)
+    getter by_month_day : Array(Int32)
+    getter by_year_day : Array(Int32)
+    getter by_week_no : Array(Int32)
+    getter by_hour : Array(Int32)
+    getter by_minute : Array(Int32)
+    getter by_second : Array(Int32)
 
     def initialize(
       @freq,
       @interval = nil,
       @wkst = Weekday::MO,
       @count = nil,
-      @til = nil, 
-      @by_set_pos = [] of Int64, 
-      @by_month_day = [] of Int64, 
-      @by_year_day = [] of Int64, 
-      @by_week_no = [] of Int64,
-      @by_hour = [] of Int64,
-      @by_minute = [] of Int64,
-      @by_second = [] of Int64
+      @til = nil,
+      @by_month = [] of Int8,
+      @by_week_day = [] of Weekday,
+      @by_set_pos = [] of Int32,
+      @by_month_day = [] of Int32,
+      @by_year_day = [] of Int32,
+      @by_week_no = [] of Int32,
+      @by_hour = [] of Int32,
+      @by_minute = [] of Int32,
+      @by_second = [] of Int32
     )
     end
   end

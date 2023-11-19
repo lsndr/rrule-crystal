@@ -1,7 +1,7 @@
 require "./spec_helper"
 
-describe RRule do
-  describe RRule::RRule do
+describe RRule::RRule do
+  describe "initialize" do
     it "be initialized" do
       freq = RRule::Frequency::DAILY
 
@@ -14,13 +14,15 @@ describe RRule do
       rrule.wkst.should eq(RRule::Weekday::MO)
       rrule.count.should eq(nil)
       rrule.til.should eq(nil)
-      rrule.by_set_pos.should eq([] of Int64)
-      rrule.by_month_day.should eq([] of Int64)
-      rrule.by_year_day.should eq([] of Int64)
-      rrule.by_week_no.should eq([] of Int64)
-      rrule.by_hour.should eq([] of Int64)
-      rrule.by_minute.should eq([] of Int64)
-      rrule.by_second.should eq([] of Int64)
+      rrule.by_month.should eq([] of Int8)
+      rrule.by_set_pos.should eq([] of Int32)
+      rrule.by_week_day.should eq([] of RRule::Weekday)
+      rrule.by_month_day.should eq([] of Int32)
+      rrule.by_year_day.should eq([] of Int32)
+      rrule.by_week_no.should eq([] of Int32)
+      rrule.by_hour.should eq([] of Int32)
+      rrule.by_minute.should eq([] of Int32)
+      rrule.by_second.should eq([] of Int32)
     end
   end
 end
