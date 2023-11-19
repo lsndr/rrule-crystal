@@ -17,28 +17,36 @@ module RRule
         "#{name}=#{time_string}"
     end
 
-    private def build_wkst
-      "WKST=#{@rrule.wkst.to_s}"
+    private def build_wkst (wkst : Weekday)
+      "WKST=#{wkst.to_s}"
     end
 
-    private def build_freq
-      "FREQ=#{@rrule.freq.to_s}"
+    private def build_freq(freq : Frequency)
+      "FREQ=#{freq.to_s}"
     end
 
-    private def build_count
-      raise Exception.new("@rrule.count is nil") if @rrule.count.nil?
-
-      "COUNT=#{@rrule.count}"
+    private def build_count (count : Int64)
+      "COUNT=#{count}"
     end
 
+    private def build_until (til : Time)
+      "UNTIL=#{format_time(til)}"
+    end
+
+    private def format_time (time : Time)
+      Time::Format::ISO_8601_DATE_TIME.format(time).gsub("-", "").gsub(":", "")
+    end
 
     def build
       params = [] of String
 
-      params << build_freq
-      params << build_count unless @rrule.count.nil?
-      params << build_wkst
+      til = @rrule.til
+      count = @rrule.count
 
+      params << build_freq(@rrule.freq)
+      params << build_until(til) unless til.nil?
+      params << build_count(count) unless count.nil?
+      params << build_wkst(@rrule.wkst)
 
       "RRULE:#{params.join(";")}"
     end
