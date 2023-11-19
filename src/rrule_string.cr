@@ -6,36 +6,18 @@ module RRule
     def initialize(@rrule : RRule, @tzid : Time::Location? = nil)
     end
 
-    private def build_array
-
+    private def build_prop (name : String, value : Object)
+      "#{name}=#{value}"
     end
 
-    private def build_date (name : String, time : Time)
-        location = @rrule.tzid || Time::Location::UTC
-        time_string = time.in(location).to_rfc3339
-
-        "#{name}=#{time_string}"
-    end
-
-    private def build_wkst (wkst : Weekday)
-      "WKST=#{wkst.to_s}"
-    end
-
-    private def build_freq(freq : Frequency)
-      "FREQ=#{freq.to_s}"
-    end
-
-    private def build_count (count : Int64)
-      "COUNT=#{count}"
-    end
 
     private def build_until (til : Time, tzid : Time::Location)
       "UNTIL=#{format_time(til, tzid)}"
     end
 
-    private def format_time (local_time : Time, location : Time::Location)
-      time = local_time.in(location)
-
+    private def build_time (name : String, local_time : Time)
+      tzid = @tzid || Time::Location::UTC
+      time = local_time.in(tzid)
 
       year = time.year.to_s.rjust(4, '0')
       month = time.month.to_s.rjust(2, '0')
@@ -44,7 +26,7 @@ module RRule
       minute = time.minute.to_s.rjust(2, '0')
       second = time.second.to_s.rjust(2, '0')
 
-      "#{year}#{month}#{day}T#{hour}#{minute}#{second}#{("Z" if time.location.utc?)}"
+      "#{name}=#{year}#{month}#{day}T#{hour}#{minute}#{second}#{("Z" if tzid.utc?)}"
     end
 
     def build
@@ -52,12 +34,11 @@ module RRule
 
       til = @rrule.til
       count = @rrule.count
-      tzid = @tzid || Time::Location::UTC
 
-      params << build_freq(@rrule.freq)
-      params << build_until(til, tzid) unless til.nil?
-      params << build_count(count) unless count.nil?
-      params << build_wkst(@rrule.wkst)
+      params << build_prop("FREQ", @rrule.freq)
+      params << build_time("UNTIL", til) unless til.nil?
+      params << build_prop("COUNT", count) unless count.nil?
+      params << build_prop("WKST", @rrule.wkst)
 
       "RRULE:#{params.join(";")}"
     end
