@@ -29,12 +29,22 @@ module RRule
       "COUNT=#{count}"
     end
 
-    private def build_until (til : Time)
-      "UNTIL=#{format_time(til)}"
+    private def build_until (til : Time, tzid : Time::Location)
+      "UNTIL=#{format_time(til, tzid)}"
     end
 
-    private def format_time (time : Time)
-      Time::Format::ISO_8601_DATE_TIME.format(time).gsub("-", "").gsub(":", "")
+    private def format_time (local_time : Time, location : Time::Location)
+      time = local_time.in(location)
+
+
+      year = time.year.to_s.rjust(4, '0')
+      month = time.month.to_s.rjust(2, '0')
+      day = time.day.to_s.rjust(2, '0')
+      hour = time.hour.to_s.rjust(2, '0')
+      minute = time.minute.to_s.rjust(2, '0')
+      second = time.second.to_s.rjust(2, '0')
+
+      "#{year}#{month}#{day}T#{hour}#{minute}#{second}#{("Z" if time.location.utc?)}"
     end
 
     def build
@@ -42,9 +52,10 @@ module RRule
 
       til = @rrule.til
       count = @rrule.count
+      tzid = @tzid || Time::Location::UTC
 
       params << build_freq(@rrule.freq)
-      params << build_until(til) unless til.nil?
+      params << build_until(til, tzid) unless til.nil?
       params << build_count(count) unless count.nil?
       params << build_wkst(@rrule.wkst)
 
