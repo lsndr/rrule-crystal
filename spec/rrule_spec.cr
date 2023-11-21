@@ -2,7 +2,7 @@ require "./spec_helper"
 
 describe RRule::RRule do
   describe "initialize" do
-    it "be initialized" do
+    it "should initialize" do
       dtstart = Time.utc(2004, 1, 10, 11, 0, 0)
       freq = RRule::Frequency::DAILY
 
