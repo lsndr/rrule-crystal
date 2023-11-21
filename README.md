@@ -1,4 +1,4 @@
-# rrule-crystal
+# RRule
 
 TODO: Write a description here
 
@@ -8,8 +8,8 @@ TODO: Write a description here
 
    ```yaml
    dependencies:
-     rrule-crystal:
-       github: your-github-user/rrule-crystal
+     rrule:
+       github: lsndr/rrule-crystal
    ```
 
 2. Run `shards install`
@@ -17,7 +17,7 @@ TODO: Write a description here
 ## Usage
 
 ```crystal
-require "rrule-crystal"
+require "rrule"
 ```
 
 TODO: Write usage instructions here
