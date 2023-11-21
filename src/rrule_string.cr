@@ -19,7 +19,7 @@ module RRule
     private def build_dtstart
       tzid = @rrule.tzid
       dtstart = @rrule.dtstart
-      
+
       if tzid.utc?
         "DTSTART:#{format_time(dtstart)}"
       else

@@ -27,4 +27,20 @@ describe RRule::RRule do
       rrule.by_second.should eq([] of Int32)
     end
   end
+
+  describe "to_a" do
+    it "should iterate DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z" do
+      dtstart = Time.utc(2004, 1, 10, 11, 0, 0)
+      til = Time.utc(2004, 1, 12, 5, 0, 0)
+      freq = RRule::Frequency::DAILY
+
+      rrule = RRule::RRule.new(
+        dtstart: dtstart,
+        freq: freq,
+        til: til,
+      )
+
+      rrule.to_a.should eq([Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 11, 11, 0, 0)])
+    end
+  end
 end

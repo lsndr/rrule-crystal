@@ -1,17 +1,18 @@
+require "./rrule_iterator"
+require "./rrule_string"
 require "./frequency"
 require "./weekday"
 
 module RRule
-  VERSION = "0.1.0"
-
   class RRule
+    include Iterable(Time)
+
     property dtstart : Time
     property tzid : Time::Location
     property freq : Frequency
     property interval : Int64?
     property wkst : Weekday
     property count : Int64?
-    # until
     property til : Time?
     property by_week_day : Array(Weekday)
     property by_month : Array(Int8)
@@ -41,6 +42,18 @@ module RRule
       @by_minute = [] of Int32,
       @by_second = [] of Int32
     )
+    end
+
+    def each
+      RRuleIterator.new(self)
+    end
+
+    def to_s
+      RRuleString.new(self).build
+    end
+
+    def to_a
+      each.to_a
     end
   end
 end
