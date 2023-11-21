@@ -3,9 +3,11 @@ require "./spec_helper"
 describe RRule::RRule do
   describe "initialize" do
     it "be initialized" do
+      dtstart = Time.utc(2004, 1, 10, 11, 0, 0)
       freq = RRule::Frequency::DAILY
 
       rrule = RRule::RRule.new(
+        dtstart: dtstart,
         freq: freq,
       )
 

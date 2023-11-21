@@ -5,24 +5,28 @@ module RRule
   VERSION = "0.1.0"
 
   class RRule
-    getter freq : Frequency
-    getter interval : Int64?
-    getter wkst : Weekday
-    getter count : Int64?
+    property dtstart : Time
+    property tzid : Time::Location
+    property freq : Frequency
+    property interval : Int64?
+    property wkst : Weekday
+    property count : Int64?
     # until
-    getter til : Time?
-    getter by_week_day : Array(Weekday)
-    getter by_month : Array(Int8)
-    getter by_set_pos : Array(Int32)
-    getter by_month_day : Array(Int32)
-    getter by_year_day : Array(Int32)
-    getter by_week_no : Array(Int32)
-    getter by_hour : Array(Int32)
-    getter by_minute : Array(Int32)
-    getter by_second : Array(Int32)
+    property til : Time?
+    property by_week_day : Array(Weekday)
+    property by_month : Array(Int8)
+    property by_set_pos : Array(Int32)
+    property by_month_day : Array(Int32)
+    property by_year_day : Array(Int32)
+    property by_week_no : Array(Int32)
+    property by_hour : Array(Int32)
+    property by_minute : Array(Int32)
+    property by_second : Array(Int32)
 
     def initialize(
+      @dtstart,
       @freq,
+      @tzid = Time::Location::UTC,
       @interval = nil,
       @wkst = Weekday::MO,
       @count = nil,
