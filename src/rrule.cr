@@ -9,6 +9,7 @@ module RRule
     include Iterable(Time)
 
     property dtstart : Time
+    # TODO: Consider removing tzid in favour of dtstart.location
     property tzid : Time::Location?
     property freq : Frequency
     property interval : Int64?
