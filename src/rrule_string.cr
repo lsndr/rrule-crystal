@@ -3,7 +3,11 @@ require "./weekday"
 
 module RRule
   class RRuleString
-    def initialize(@rrule : RRule)
+    @rrule : RRule
+
+    getter rrule
+
+    def initialize(@rrule)
     end
 
     private def build_prop(name : String, value : Object)
@@ -56,6 +60,7 @@ module RRule
       by_minute = @rrule.by_minute
       by_second = @rrule.by_second
 
+      # TODO: Consider using String.build
       rrule_params << build_prop("FREQ", @rrule.freq)
       rrule_params << build_time("UNTIL", til) unless til.nil?
       rrule_params << build_prop("COUNT", count) unless count.nil?

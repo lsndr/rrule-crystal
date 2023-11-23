@@ -1,4 +1,5 @@
 require "./rrule_iterator"
+require "./string_rrule"
 require "./rrule_string"
 require "./frequency"
 require "./weekday"
@@ -54,6 +55,10 @@ module RRule
 
     def to_a
       each.to_a
+    end
+
+    def self.from_string(string : String)
+      StringRRule.new(string).parse
     end
   end
 end

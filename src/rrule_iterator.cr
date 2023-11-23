@@ -22,8 +22,8 @@ module RRule
         time + 1.week
       when Frequency::MONTHLY
         step = 1
-        # Recurrence rules may generate recurrence instances with an invalid date (e.g., February 30) 
-        # or nonexistent local time (e.g., 1:30 AM on a day where the local time is moved forward by an hour at 1:00 AM). 
+        # Recurrence rules may generate recurrence instances with an invalid date (e.g., February 30)
+        # or nonexistent local time (e.g., 1:30 AM on a day where the local time is moved forward by an hour at 1:00 AM).
         # Such recurrence instances MUST be ignored and MUST NOT be counted as part of the recurrence set.
         # https://icalendar.org/iCalendar-RFC-5545/3-3-10-recurrence-rule.html
         loop do

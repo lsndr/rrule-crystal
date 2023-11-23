@@ -71,4 +71,23 @@ describe RRule::RRule do
       rrule.to_a.should eq([Time.utc(2004, 1, 31, 11, 0, 0), Time.utc(2004, 3, 31, 11, 0, 0), Time.utc(2004, 5, 31, 11, 0, 0)])
     end
   end
+
+  describe "self.parse" do
+    cases = {
+      "DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z" => RRule::RRule.new(
+        dtstart: Time.utc(2004, 1, 10, 11, 0, 0),
+        til: Time.utc(2004, 1, 12, 5, 0, 0),
+        freq: RRule::Frequency::DAILY
+      ),
+    }
+
+    cases.each do |(input_string, expected_rrule)|
+      it "should convert #{input_string} to RRule" do
+        rrule = RRule::RRule.from_string(input_string)
+
+        rrule.dtstart.should eq(expected_rrule.dtstart)
+        rrule.freq.should eq(expected_rrule.freq)
+      end
+    end
+  end
 end
