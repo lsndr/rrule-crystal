@@ -21,13 +21,10 @@ module RRule
     end
 
     private def build_dtstart
-      tzid = @rrule.tzid
-      dtstart = @rrule.dtstart
-
-      if tzid.utc?
-        "DTSTART:#{format_time(dtstart)}"
+      if tzid = @rrule.tzid?
+        "DTSTART;TZID=#{tzid.name}:#{format_time(@rrule.dtstart)}"
       else
-        "DTSTART;TZID=#{tzid.name}:#{format_time(dtstart)}"
+        "DTSTART:#{format_time(@rrule.dtstart)}"
       end
     end
 
@@ -50,6 +47,7 @@ module RRule
 
       til = @rrule.til
       count = @rrule.count
+      wkst = @rrule.wkst?
       by_week_day = @rrule.by_week_day
       by_month = @rrule.by_month
       by_set_pos = @rrule.by_set_pos
@@ -64,7 +62,7 @@ module RRule
       rrule_params << build_prop("FREQ", @rrule.freq)
       rrule_params << build_time("UNTIL", til) unless til.nil?
       rrule_params << build_prop("COUNT", count) unless count.nil?
-      rrule_params << build_prop("WKST", @rrule.wkst)
+      rrule_params << build_prop("WKST", wkst) unless wkst.nil?
       rrule_params << build_prop("BYWEEKDAY", by_week_day) unless by_week_day.empty?
       rrule_params << build_prop("BYMONTH", by_month) unless by_month.empty?
       rrule_params << build_prop("BYSETPOS", by_set_pos) unless by_set_pos.empty?

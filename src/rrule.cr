@@ -9,10 +9,10 @@ module RRule
     include Iterable(Time)
 
     property dtstart : Time
-    property tzid : Time::Location
+    property tzid : Time::Location?
     property freq : Frequency
     property interval : Int64?
-    property wkst : Weekday
+    property wkst : Weekday?
     property count : Int64?
     property til : Time?
     property by_week_day : Array(Weekday)
@@ -28,9 +28,9 @@ module RRule
     def initialize(
       @dtstart,
       @freq,
-      @tzid = Time::Location::UTC,
+      @tzid = nil,
       @interval = nil,
-      @wkst = Weekday::MO,
+      @wkst = nil,
       @count = nil,
       @til = nil,
       @by_month = [] of Int8,
@@ -43,6 +43,22 @@ module RRule
       @by_minute = [] of Int32,
       @by_second = [] of Int32
     )
+    end
+
+    def wkst
+      @wkst || Weekday::MO
+    end
+
+    def wkst?
+      @wkst
+    end
+
+    def tzid
+      @tzid || Time::Location::UTC
+    end
+
+    def tzid?
+      @tzid
     end
 
     def each

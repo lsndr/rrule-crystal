@@ -2,7 +2,7 @@ require "./spec_helper"
 
 describe RRule::RRuleString do
   describe "build" do
-    it "builds string DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY;WKST=MO" do
+    it "builds string DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY" do
       rrule = RRule::RRule.new(
         dtstart: Time.utc(2004, 1, 10, 11, 0, 0),
         freq: RRule::Frequency::WEEKLY
@@ -10,10 +10,10 @@ describe RRule::RRuleString do
 
       rrule_string = RRule::RRuleString.new(rrule)
 
-      rrule_string.build.should eq("DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY;WKST=MO")
+      rrule_string.build.should eq("DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY")
     end
 
-    it "builds string DTSTART:20040110T110000Z\nRRULE:FREQ=HOURLY;COUNT=1;WKST=MO" do
+    it "builds string DTSTART:20040110T110000Z\nRRULE:FREQ=HOURLY;COUNT=1" do
       rrule = RRule::RRule.new(
         dtstart: Time.utc(2004, 1, 10, 11, 0, 0),
         freq: RRule::Frequency::HOURLY,
@@ -22,7 +22,7 @@ describe RRule::RRuleString do
 
       rrule_string = RRule::RRuleString.new(rrule)
 
-      rrule_string.build.should eq("DTSTART:20040110T110000Z\nRRULE:FREQ=HOURLY;COUNT=1;WKST=MO")
+      rrule_string.build.should eq("DTSTART:20040110T110000Z\nRRULE:FREQ=HOURLY;COUNT=1")
     end
 
     it "builds string DTSTART:20030110T110000Z\nRRULE:FREQ=HOURLY;UNTIL=20040110T110000Z;WKST=SA" do
@@ -122,7 +122,7 @@ describe RRule::RRuleString do
       rrule_string.build.should eq("DTSTART:20030110T110000Z\nRRULE:FREQ=MINUTELY;WKST=MO;BYMONTHDAY=10,15,30")
     end
 
-    it "builds string DTSTART:20030110T110000Z\nRRULE:FREQ=SECONDLY;WKST=MO;BYYEARDAY=100,300" do
+    it "builds string DTSTART:20030110T110000Z\nRRULE:FREQ=SECONDLY;BYYEARDAY=100,300" do
       rrule = RRule::RRule.new(
         dtstart: Time.utc(2003, 1, 10, 11, 0, 0),
         freq: RRule::Frequency::SECONDLY,
@@ -131,10 +131,10 @@ describe RRule::RRuleString do
 
       rrule_string = RRule::RRuleString.new(rrule)
 
-      rrule_string.build.should eq("DTSTART:20030110T110000Z\nRRULE:FREQ=SECONDLY;WKST=MO;BYYEARDAY=100,300")
+      rrule_string.build.should eq("DTSTART:20030110T110000Z\nRRULE:FREQ=SECONDLY;BYYEARDAY=100,300")
     end
 
-    it "builds string DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;WKST=MO;BYWEEKNO=4,40,30" do
+    it "builds string DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;BYWEEKNO=4,40,30" do
       rrule = RRule::RRule.new(
         dtstart: Time.utc(2003, 1, 10, 11, 0, 0),
         freq: RRule::Frequency::WEEKLY,
@@ -143,10 +143,10 @@ describe RRule::RRuleString do
 
       rrule_string = RRule::RRuleString.new(rrule)
 
-      rrule_string.build.should eq("DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;WKST=MO;BYWEEKNO=4,40,30")
+      rrule_string.build.should eq("DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;BYWEEKNO=4,40,30")
     end
 
-    it "builds string DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;WKST=MO;BYHOUR=2,12;BYMINUTE=30,59;BYSECOND=10,30" do
+    it "builds string DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;BYHOUR=2,12;BYMINUTE=30,59;BYSECOND=10,30" do
       rrule = RRule::RRule.new(
         dtstart: Time.utc(2003, 1, 10, 11, 0, 0),
         freq: RRule::Frequency::WEEKLY,
@@ -157,7 +157,7 @@ describe RRule::RRuleString do
 
       rrule_string = RRule::RRuleString.new(rrule)
 
-      rrule_string.build.should eq("DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;WKST=MO;BYHOUR=2,12;BYMINUTE=30,59;BYSECOND=10,30")
+      rrule_string.build.should eq("DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;BYHOUR=2,12;BYMINUTE=30,59;BYSECOND=10,30")
     end
   end
 end

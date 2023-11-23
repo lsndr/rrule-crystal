@@ -11,9 +11,12 @@ describe RRule::RRule do
         freq: freq,
       )
 
+      rrule.tzid.should eq(Time::Location::UTC)
+      rrule.tzid?.should eq(nil)
       rrule.freq.should eq(freq)
       rrule.interval.should eq(nil)
       rrule.wkst.should eq(RRule::Weekday::MO)
+      rrule.wkst?.should eq(nil)
       rrule.count.should eq(nil)
       rrule.til.should eq(nil)
       rrule.by_month.should eq([] of Int8)
