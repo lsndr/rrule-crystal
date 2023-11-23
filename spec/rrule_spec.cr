@@ -29,7 +29,7 @@ describe RRule::RRule do
   end
 
   describe "to_a" do
-    it "should iterate DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z" do
+    it "should represent DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z" do
       dtstart = Time.utc(2004, 1, 10, 11, 0, 0)
       til = Time.utc(2004, 1, 12, 5, 0, 0)
       freq = RRule::Frequency::DAILY
@@ -41,6 +41,34 @@ describe RRule::RRule do
       )
 
       rrule.to_a.should eq([Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 11, 11, 0, 0)])
+    end
+
+    it "should represent DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY;UNTIL=20040201T050000Z" do
+      dtstart = Time.utc(2004, 1, 10, 11, 0, 0)
+      til = Time.utc(2004, 2, 1, 5, 0, 0)
+      freq = RRule::Frequency::WEEKLY
+
+      rrule = RRule::RRule.new(
+        dtstart: dtstart,
+        freq: freq,
+        til: til,
+      )
+
+      rrule.to_a.should eq([Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 17, 11, 0, 0), Time.utc(2004, 1, 24, 11, 0, 0), Time.utc(2004, 1, 31, 11, 0, 0)])
+    end
+
+    it "should represent DTSTART:20040131T110000Z\nRRULE:FREQ=MONTHLY;UNTIL=20040602T050000Z" do
+      dtstart = Time.utc(2004, 1, 31, 11, 0, 0)
+      til = Time.utc(2004, 6, 2, 5, 0, 0)
+      freq = RRule::Frequency::MONTHLY
+
+      rrule = RRule::RRule.new(
+        dtstart: dtstart,
+        freq: freq,
+        til: til,
+      )
+
+      rrule.to_a.should eq([Time.utc(2004, 1, 31, 11, 0, 0), Time.utc(2004, 3, 31, 11, 0, 0), Time.utc(2004, 5, 31, 11, 0, 0)])
     end
   end
 end
