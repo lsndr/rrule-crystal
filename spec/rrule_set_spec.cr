@@ -45,7 +45,7 @@ describe RRule::RRuleSet do
         rrules: [
           RRule::RRule.new(
             freq: RRule::Frequency::WEEKLY
-          )
+          ),
         ]
       ) => "DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY",
       RRule::RRuleSet.new(
@@ -54,7 +54,7 @@ describe RRule::RRuleSet do
           RRule::RRule.new(
             freq: RRule::Frequency::HOURLY,
             count: 1
-          )
+          ),
         ]
       ) => "DTSTART:20040110T110000Z\nRRULE:FREQ=HOURLY;COUNT=1",
       RRule::RRuleSet.new(
@@ -64,7 +64,7 @@ describe RRule::RRuleSet do
             freq: RRule::Frequency::HOURLY,
             wkst: RRule::Weekday::SA,
             til: Time.utc(2004, 1, 10, 11, 0, 0)
-          )
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=HOURLY;UNTIL=20040110T110000Z;WKST=SA",
       RRule::RRuleSet.new(
@@ -74,7 +74,7 @@ describe RRule::RRuleSet do
             freq: RRule::Frequency::SECONDLY,
             wkst: RRule::Weekday::WE,
             til: Time.local(2004, 1, 10, 11, 0, 0, location: Time::Location.load("America/Santiago"))
-          )
+          ),
         ]
       ) => "DTSTART;TZID=America/Santiago:20030110T110000\nRRULE:FREQ=SECONDLY;UNTIL=20040110T110000;WKST=WE",
       RRule::RRuleSet.new(
@@ -84,7 +84,7 @@ describe RRule::RRuleSet do
             freq: RRule::Frequency::YEARLY,
             wkst: RRule::Weekday::TU,
             til: Time.local(2004, 1, 10, 11, 0, 0, location: Time::Location.load("America/Santiago"))
-          )
+          ),
         ]
       ) => "DTSTART:20030110T140000Z\nRRULE:FREQ=YEARLY;UNTIL=20040110T140000Z;WKST=TU",
       RRule::RRuleSet.new(
@@ -94,7 +94,7 @@ describe RRule::RRuleSet do
             freq: RRule::Frequency::MONTHLY,
             wkst: RRule::Weekday::SU,
             by_week_day: [RRule::Weekday::MO, RRule::Weekday::SU]
-          )
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=MONTHLY;WKST=SU;BYWEEKDAY=MO,SU",
       RRule::RRuleSet.new(
@@ -103,8 +103,8 @@ describe RRule::RRuleSet do
           RRule::RRule.new(
             freq: RRule::Frequency::MONTHLY,
             wkst: RRule::Weekday::FR,
-            by_month: [1,3,4,12]
-          )
+            by_month: [1, 3, 4, 12]
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=MONTHLY;WKST=FR;BYMONTH=1,3,4,12",
       RRule::RRuleSet.new(
@@ -115,7 +115,7 @@ describe RRule::RRuleSet do
             wkst: RRule::Weekday::FR,
             by_month: [10, 1],
             by_set_pos: [3, 14]
-          )
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=MONTHLY;WKST=FR;BYMONTH=10,1;BYSETPOS=3,14",
       RRule::RRuleSet.new(
@@ -125,7 +125,7 @@ describe RRule::RRuleSet do
             freq: RRule::Frequency::MINUTELY,
             wkst: RRule::Weekday::MO,
             by_month_day: [10, 15, 30]
-          )
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=MINUTELY;WKST=MO;BYMONTHDAY=10,15,30",
       RRule::RRuleSet.new(
@@ -134,7 +134,7 @@ describe RRule::RRuleSet do
           RRule::RRule.new(
             freq: RRule::Frequency::SECONDLY,
             by_year_day: [100, 300]
-          )
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=SECONDLY;BYYEARDAY=100,300",
       RRule::RRuleSet.new(
@@ -143,7 +143,7 @@ describe RRule::RRuleSet do
           RRule::RRule.new(
             freq: RRule::Frequency::WEEKLY,
             by_week_no: [4, 40, 30]
-          )
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;BYWEEKNO=4,40,30",
       RRule::RRuleSet.new(
@@ -154,7 +154,7 @@ describe RRule::RRuleSet do
             by_hour: [2, 12],
             by_minute: [30, 59],
             by_second: [10, 30]
-          )
+          ),
         ]
       ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=WEEKLY;BYHOUR=2,12;BYMINUTE=30,59;BYSECOND=10,30",
     }
@@ -162,7 +162,7 @@ describe RRule::RRuleSet do
     cases.each do |(rrule_set, expected_string)|
       it "builds string #{expected_string}" do
         rrule_set_string = rrule_set.to_s
-  
+
         rrule_set_string.should eq(expected_string)
       end
     end
@@ -211,6 +211,10 @@ describe RRule::RRuleSet do
   #     rrule.to_a.should eq([Time.utc(2004, 1, 31, 11, 0, 0), Time.utc(2004, 3, 31, 11, 0, 0), Time.utc(2004, 5, 31, 11, 0, 0)])
   #   end
   # end
+
+  describe "==" do
+    # TODO: Write tests
+  end
 
   describe "self.from_string" do
     cases = {

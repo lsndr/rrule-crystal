@@ -1,5 +1,5 @@
-#require "./string_rrule"
-#require "./rrule_string"
+# require "./string_rrule"
+# require "./rrule_string"
 require "./frequency"
 require "./weekday"
 
@@ -49,7 +49,7 @@ module RRule
     def to_s(dtstart : DtStart)
       name = "RRULE"
       params = Hash(String, String).new
-      value =  Hash(String, String).new
+      value = Hash(String, String).new
 
       param_freq = freq
       param_til = til
@@ -86,6 +86,23 @@ module RRule
       )
 
       prop.to_s
+    end
+
+    def ==(rrule : RRule)
+      freq == rrule.freq &&
+        interval == rrule.interval &&
+        wkst? == rrule.wkst? &&
+        count == rrule.count &&
+        til == rrule.til &&
+        by_week_day == rrule.by_week_day &&
+        by_month == rrule.by_month &&
+        by_set_pos == rrule.by_set_pos &&
+        by_month_day == rrule.by_month_day &&
+        by_year_day == rrule.by_year_day &&
+        by_week_no == rrule.by_week_no &&
+        by_hour == rrule.by_hour &&
+        by_minute == rrule.by_minute &&
+        by_second == rrule.by_second
     end
   end
 end

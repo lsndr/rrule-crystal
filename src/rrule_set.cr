@@ -4,7 +4,8 @@ module RRule
   class RRuleSet
     # include Iterable(Time)
 
-    class InvalidRRuleSet < Exception end
+    class InvalidRRuleSet < Exception
+    end
 
     property dtstart : DtStart
     getter rrules = [] of RRule
@@ -39,12 +40,16 @@ module RRule
         if rrules.size > 0
           str << "\n"
 
-          rrules.each_with_index  do |rrule, index|
+          rrules.each_with_index do |rrule, index|
             str << rrule.to_s(dtstart)
             str << "\n" unless index == rrules.size - 1
           end
         end
       end
+    end
+
+    def ==(rrule_set : RRuleSet)
+      dtstart == rrule_set.dtstart && rrules == rrule_set.rrules
     end
 
     def self.from_string(str : String)
