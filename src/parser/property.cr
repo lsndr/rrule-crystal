@@ -49,7 +49,7 @@ module RRule::Parser
 
         if prop_value.is_a?(String)
           str << prop_value
-        else 
+        else
           str << params_to_string(prop_value)
         end
       end
@@ -76,7 +76,7 @@ module RRule::Parser
         if key.nil?
           if params.size == 0
             break if param.size == 0
-            return value 
+            return value
           else
             raise InvalidParameters.new("Invalid parameters string #{str}")
           end
@@ -108,9 +108,9 @@ module RRule::Parser
       raise InvalidProperty.new("Invalid property key params: '#{key_value[0]}'") if params.is_a?(String)
 
       self.new(
-        name:   name,
+        name: name,
         params: params,
-        value:  value,
+        value: value,
       )
     end
   end
