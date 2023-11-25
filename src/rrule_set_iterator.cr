@@ -1,52 +1,61 @@
+require "./rrule_iterator"
 require "./rrule_set"
 require "./frequency"
 require "./weekday"
 
 module RRule
-  # class RRuleSetIterator
-  #   include Iterator(Time)
+  class RRuleSetIterator
+    include Iterator(Time)
 
-  #   @rrule_set : RRuleSet
-  #   @last_time : Time
+    @rrule_iterators : Array(RRuleIterator)
+    @value : Time?
+    @started = false
+    @stopped = false
 
-  #   def initialize(
-  #     @rrule_set
-  #   )
-  #     @rrule_set
+    def initialize(
+      rrule_set : RRuleSet
+    )
+      @rrule_iterators = rrule_set.rrules.map do |rrule|
+        RRuleIterator.new(rrule, rrule_set.dtstart)
+      end
+    end
 
-  #     @last_time = @rrule.dtstart.in(@rrule.tzid)
-  #   end
+    def started?
+      @started
+    end
 
-  #   private def increase_by_frequence(time : Time)
-  #     case @rrule.freq
-  #     when Frequency::DAILY
-  #       time + 1.day
-  #     when Frequency::WEEKLY
-  #       time + 1.week
-  #     when Frequency::MONTHLY
-  #       step = 1
-  #       # Recurrence rules may generate recurrence instances with an invalid date (e.g., February 30)
-  #       # or nonexistent local time (e.g., 1:30 AM on a day where the local time is moved forward by an hour at 1:00 AM).
-  #       # Such recurrence instances MUST be ignored and MUST NOT be counted as part of the recurrence set.
-  #       # https://icalendar.org/iCalendar-RFC-5545/3-3-10-recurrence-rule.html
-  #       loop do
-  #         increased_time = time + Time::MonthSpan.new(step)
-  #         return increased_time if increased_time.day == time.day
+    def stopped?
+      @stopped
+    end
 
-  #         step += 1
-  #       end
-  #     else
-  #       raise Exception.new("Not implemented")
-  #     end
-  #   end
+    def next
+      return stop if stopped?
 
-  #   def next
-  #     return stop if @rrule.til.try &.<= @last_time
+      @started = true
+      new_value = next_value
+      @value = new_value
 
-  #     last_time = @last_time
-  #     @last_time = increase_by_frequence(@last_time)
+      if new_value.nil?
+        @stopped = true
+        return stop
+      end
 
-  #     last_time
-  #   end
-  # end
+      new_value
+    end
+
+    private def next_value
+      new_value = nil
+
+      @rrule_iterators.each do |iterator|
+        while !iterator.stopped? && @value == iterator.value
+          iterator.next
+        end
+
+        value = iterator.value
+        new_value = iterator.value if !value.nil? && (new_value.nil? || value > new_value)
+      end
+
+      new_value
+    end
+  end
 end

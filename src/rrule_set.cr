@@ -1,8 +1,9 @@
+require "./rrule_set_iterator"
 require "./dtstart"
 
 module RRule
   class RRuleSet
-    # include Iterable(Time)
+    include Enumerable(Time)
 
     class InvalidRRuleSet < Exception
     end
@@ -25,13 +26,13 @@ module RRule
       @rrules.concat(rrules)
     end
 
-    # def each
-    #   RRuleIterator.new(self)
-    # end
+    def each(&)
+      iterator = RRuleSetIterator.new(self)
 
-    # def to_a
-    #   each.to_a
-    # end
+      iterator.each do |time|
+        yield time
+      end
+    end
 
     def to_s
       String.build do |str|
@@ -57,7 +58,7 @@ module RRule
       rrules = [] of RRule
 
       str.split('\n') do |str|
-        prop = Parser::Property.from_string(str)
+        prop = Parser::Property.from_string(str.strip)
 
         if dtstart.nil?
           dtstart = DtStart.from_property(prop)

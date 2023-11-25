@@ -168,49 +168,21 @@ describe RRule::RRuleSet do
     end
   end
 
-  # describe "to_a" do
-  #   it "should represent DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z" do
-  #     dtstart = Time.utc(2004, 1, 10, 11, 0, 0)
-  #     til = Time.utc(2004, 1, 12, 5, 0, 0)
-  #     freq = RRule::Frequency::DAILY
+  describe "to_a" do
+    cases = {
+      "DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z"  => [Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 11, 11, 0, 0)],
+      "DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY;UNTIL=20040201T050000Z" => [Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 17, 11, 0, 0), Time.utc(2004, 1, 24, 11, 0, 0), Time.utc(2004, 1, 31, 11, 0, 0)],
+      "DTSTART:20040131T110000Z\nRRULE:FREQ=MONTHLY;UNTIL=20040602T050000Z" => [Time.utc(2004, 1, 31, 11, 0, 0), Time.utc(2004, 3, 31, 11, 0, 0), Time.utc(2004, 5, 31, 11, 0, 0)],
+    }
 
-  #     rrule = RRule::RRule.new(
-  #       dtstart: dtstart,
-  #       freq: freq,
-  #       til: til,
-  #     )
+    cases.each do |rrule_string, expected_array|
+      it "should iterate #{rrule_string}" do
+        rrule_set = RRule::RRuleSet.from_string(rrule_string)
 
-  #     rrule.to_a.should eq([Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 11, 11, 0, 0)])
-  #   end
-
-  #   it "should represent DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY;UNTIL=20040201T050000Z" do
-  #     dtstart = Time.utc(2004, 1, 10, 11, 0, 0)
-  #     til = Time.utc(2004, 2, 1, 5, 0, 0)
-  #     freq = RRule::Frequency::WEEKLY
-
-  #     rrule = RRule::RRule.new(
-  #       dtstart: dtstart,
-  #       freq: freq,
-  #       til: til,
-  #     )
-
-  #     rrule.to_a.should eq([Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 17, 11, 0, 0), Time.utc(2004, 1, 24, 11, 0, 0), Time.utc(2004, 1, 31, 11, 0, 0)])
-  #   end
-
-  #   it "should represent DTSTART:20040131T110000Z\nRRULE:FREQ=MONTHLY;UNTIL=20040602T050000Z" do
-  #     dtstart = Time.utc(2004, 1, 31, 11, 0, 0)
-  #     til = Time.utc(2004, 6, 2, 5, 0, 0)
-  #     freq = RRule::Frequency::MONTHLY
-
-  #     rrule = RRule::RRule.new(
-  #       dtstart: dtstart,
-  #       freq: freq,
-  #       til: til,
-  #     )
-
-  #     rrule.to_a.should eq([Time.utc(2004, 1, 31, 11, 0, 0), Time.utc(2004, 3, 31, 11, 0, 0), Time.utc(2004, 5, 31, 11, 0, 0)])
-  #   end
-  # end
+        rrule_set.to_a.should eq(expected_array)
+      end
+    end
+  end
 
   describe "==" do
     # TODO: Write tests
