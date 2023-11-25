@@ -1,23 +1,17 @@
-require "./rrule_iterator"
-require "./string_rrule"
-require "./rrule_string"
+#require "./string_rrule"
+#require "./rrule_string"
 require "./frequency"
 require "./weekday"
 
 module RRule
   class RRule
-    include Iterable(Time)
-
-    property dtstart : Time
-    # TODO: Consider removing tzid in favour of dtstart.location
-    property tzid : Time::Location?
     property freq : Frequency
     property interval : Int64?
     property wkst : Weekday?
     property count : Int64?
     property til : Time?
     property by_week_day : Array(Weekday)
-    property by_month : Array(Int8)
+    property by_month : Array(Int32)
     property by_set_pos : Array(Int32)
     property by_month_day : Array(Int32)
     property by_year_day : Array(Int32)
@@ -27,14 +21,12 @@ module RRule
     property by_second : Array(Int32)
 
     def initialize(
-      @dtstart,
       @freq,
-      @tzid = nil,
       @interval = nil,
       @wkst = nil,
       @count = nil,
       @til = nil,
-      @by_month = [] of Int8,
+      @by_month = [] of Int32,
       @by_week_day = [] of Weekday,
       @by_set_pos = [] of Int32,
       @by_month_day = [] of Int32,
@@ -54,28 +46,46 @@ module RRule
       @wkst
     end
 
-    def tzid
-      @tzid || Time::Location::UTC
-    end
+    def to_s(dtstart : DtStart)
+      name = "RRULE"
+      params = Hash(String, String).new
+      value =  Hash(String, String).new
 
-    def tzid?
-      @tzid
-    end
+      param_freq = freq
+      param_til = til
+      param_count = count
+      param_wkst = wkst?
+      param_by_week_day = by_week_day
+      param_by_month = by_month
+      param_by_set_pos = by_set_pos
+      param_by_month_day = by_month_day
+      param_by_year_day = by_year_day
+      param_by_week_no = by_week_no
+      param_by_hour = by_hour
+      param_by_minute = by_minute
+      param_by_second = by_second
 
-    def each
-      RRuleIterator.new(self)
-    end
+      value["FREQ"] = param_freq.to_s
+      value["UNTIL"] = Parser::Helpers.format_time(param_til.in(dtstart.tzid)) unless param_til.nil?
+      value["COUNT"] = param_count.to_s unless param_count.nil?
+      value["WKST"] = param_wkst.to_s unless param_wkst.nil?
+      value["BYWEEKDAY"] = param_by_week_day.join(',') unless param_by_week_day.empty?
+      value["BYMONTH"] = param_by_month.join(',') unless param_by_month.empty?
+      value["BYSETPOS"] = param_by_set_pos.join(',') unless param_by_set_pos.empty?
+      value["BYMONTHDAY"] = by_month_day.join(',') unless by_month_day.empty?
+      value["BYYEARDAY"] = param_by_year_day.join(',') unless param_by_year_day.empty?
+      value["BYWEEKNO"] = param_by_week_no.join(',') unless param_by_week_no.empty?
+      value["BYHOUR"] = param_by_hour.join(',') unless param_by_hour.empty?
+      value["BYMINUTE"] = param_by_minute.join(',') unless param_by_minute.empty?
+      value["BYSECOND"] = param_by_second.join(',') unless param_by_second.empty?
 
-    def to_s
-      RRuleString.new(self).build
-    end
+      prop = Parser::Property.new(
+        name: name,
+        params: params,
+        value: value
+      )
 
-    def to_a
-      each.to_a
-    end
-
-    def self.from_string(string : String)
-      StringRRule.new(string).parse
+      prop.to_s
     end
   end
 end
