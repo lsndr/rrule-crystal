@@ -6,9 +6,9 @@ require "./weekday"
 module RRule
   class RRule
     property freq : Frequency
-    property interval : Int64?
+    property interval : Int32?
     property wkst : Weekday?
-    property count : Int64?
+    property count : Int32?
     property til : Time?
     property by_week_day : Array(Weekday)
     property by_month : Array(Int32)
@@ -19,6 +19,9 @@ module RRule
     property by_hour : Array(Int32)
     property by_minute : Array(Int32)
     property by_second : Array(Int32)
+
+    class InvalidRRuleProperty < Exception
+    end
 
     def initialize(
       @freq,
@@ -103,6 +106,45 @@ module RRule
         by_hour == rrule.by_hour &&
         by_minute == rrule.by_minute &&
         by_second == rrule.by_second
+    end
+
+    def self.from_property(prop : Parser::Property, tzid : Time::Location)
+      name = prop.name
+      value = prop.value
+
+      raise InvalidRRuleProperty.new("Invalid RRULE property name: #{name}") unless name == "RRULE"
+      raise InvalidRRuleProperty.new("Invalid RRULE property value") unless value.is_a?(Hash(String, String))
+      raise InvalidRRuleProperty.new("FREQ value parameter is required") if value["FREQ"]?.nil?
+
+      freq = Frequency.parse(value["FREQ"])
+      til = value["UNTIL"]? && Parser::Helpers.parse_time(value["UNTIL"], tzid)
+      count = value["COUNT"]? && value["COUNT"].to_i
+      wkst = value["WKST"]? && Weekday.parse(value["WKST"])
+      by_week_day = value["BYWEEKDAY"]? && Parser::Helpers.parse_array_of_weekdays(value["BYWEEKDAY"])
+      by_month = value["BYMONTH"]? && Parser::Helpers.parse_array_of_int32(value["BYMONTH"])
+      by_set_pos = value["BYSETPOS"]? && Parser::Helpers.parse_array_of_int32(value["BYSETPOS"])
+      by_month_day = value["BYMONTHDAY"]? && Parser::Helpers.parse_array_of_int32(value["BYMONTHDAY"])
+      by_year_day = value["BYYEARDAY"]? && Parser::Helpers.parse_array_of_int32(value["BYYEARDAY"])
+      by_week_no = value["BYWEEKNO"]? && Parser::Helpers.parse_array_of_int32(value["BYWEEKNO"])
+      by_hour = value["BYHOUR"]? && Parser::Helpers.parse_array_of_int32(value["BYHOUR"])
+      by_minute = value["BYMINUTE"]? && Parser::Helpers.parse_array_of_int32(value["BYMINUTE"])
+      by_second = value["BYSECOND"]? && Parser::Helpers.parse_array_of_int32(value["BYSECOND"])
+
+      self.new(
+        freq: freq,
+        til: til,
+        count: count,
+        wkst: wkst,
+        by_week_day: by_week_day || [] of Weekday,
+        by_month: by_month || [] of Int32,
+        by_set_pos: by_set_pos || [] of Int32,
+        by_month_day: by_month_day || [] of Int32,
+        by_year_day: by_year_day || [] of Int32,
+        by_week_no: by_week_no || [] of Int32,
+        by_hour: by_hour || [] of Int32,
+        by_minute: by_minute || [] of Int32,
+        by_second: by_second || [] of Int32,
+      )
     end
   end
 end

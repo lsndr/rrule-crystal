@@ -54,17 +54,25 @@ module RRule
 
     def self.from_string(str : String)
       dtstart = nil
+      rrules = [] of RRule
 
       str.split('\n') do |str|
+        prop = Parser::Property.from_string(str)
+
         if dtstart.nil?
-          dtstart = DtStart.from_string(str)
+          dtstart = DtStart.from_property(prop)
+        elsif prop.name == "RRULE"
+          rrules << RRule.from_property(prop, dtstart.tzid)
+        else
+          raise InvalidRRuleSet.new("Unsupported property: #{prop.name}")
         end
       end
 
       raise InvalidRRuleSet.new("Property DTSTART is not provided") if dtstart.nil?
 
       RRuleSet.new(
-        dtstart: dtstart
+        dtstart: dtstart,
+        rrules: rrules
       )
     end
   end

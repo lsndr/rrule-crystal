@@ -1,4 +1,5 @@
 module RRule
+  # TODO: Consider renaming to Freq
   enum Frequency
     YEARLY   = 0
     MONTHLY  = 1

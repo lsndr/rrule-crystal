@@ -6,7 +6,7 @@ module RRule
     # TODO: Consider removing tzid in favour of dtstart.location
     property tzid : Time::Location?
 
-    class InvalidDtstart < Exception
+    class InvalidDtStartProperty < Exception
     end
 
     def initialize(
@@ -43,19 +43,15 @@ module RRule
       prop.to_s
     end
 
-    def self.from_string(str : String)
-      prop = Parser::Property.from_string(str)
-
+    def self.from_property(prop : Parser::Property)
       name = prop.name
       value = prop.value
       tzid = prop.params["TZID"]?
 
-      raise InvalidDtstart.new("Invalid DTSTART property name: '#{name}'") unless name == "DTSTART"
-      raise InvalidDtstart.new("Invalid DTSTART property value") unless value.is_a?(String)
+      raise InvalidDtStartProperty.new("Invalid DTSTART property name: '#{name}'") unless name == "DTSTART"
+      raise InvalidDtStartProperty.new("Invalid DTSTART property value") unless value.is_a?(String)
 
-      time = Parser::Helpers.parse_time?(value, tzid)
-
-      raise InvalidDtstart.new("Invalid DTSTART time") if time.nil?
+      time = Parser::Helpers.parse_time(value, tzid)
 
       self.new(
         time: time,
