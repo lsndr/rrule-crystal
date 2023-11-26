@@ -182,6 +182,22 @@ describe RRule::RRuleSet do
                                                                                                   (1..23).map { |day| Time.local(1997, 12, day, 9, 0, 0, location: ny_location) },
       "DTSTART;TZID=America/New_York:19970902T090000\nRRULE:FREQ=DAILY;INTERVAL=10;COUNT=5" => [2, 12, 22].map { |day| Time.local(1997, 9, day, 9, 0, 0, location: ny_location) } +
                                                                                                [2, 12].map { |day| Time.local(1997, 10, day, 9, 0, 0, location: ny_location) },
+      "DTSTART;TZID=America/New_York:19970209T090000\nRRULE:FREQ=DAILY;INTERVAL=10;COUNT=6" => [
+        Time.local(1997, 2, 9, 9, 0, 0, location: ny_location),
+        Time.local(1997, 2, 19, 9, 0, 0, location: ny_location),
+        Time.local(1997, 3, 1, 9, 0, 0, location: ny_location),
+        Time.local(1997, 3, 11, 9, 0, 0, location: ny_location),
+        Time.local(1997, 3, 21, 9, 0, 0, location: ny_location),
+        Time.local(1997, 3, 31, 9, 0, 0, location: ny_location),
+      ],
+      "DTSTART;TZID=America/New_York:20000209T090000\nRRULE:FREQ=DAILY;INTERVAL=10;COUNT=6" => [
+        Time.local(2000, 2, 9, 9, 0, 0, location: ny_location),
+        Time.local(2000, 2, 19, 9, 0, 0, location: ny_location),
+        Time.local(2000, 2, 29, 9, 0, 0, location: ny_location),
+        Time.local(2000, 3, 10, 9, 0, 0, location: ny_location),
+        Time.local(2000, 3, 20, 9, 0, 0, location: ny_location),
+        Time.local(2000, 3, 30, 9, 0, 0, location: ny_location),
+      ],
     }
 
     cases.each do |rrule_string, expected_array|
