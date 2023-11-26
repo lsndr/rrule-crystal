@@ -11,6 +11,7 @@ module RRule
     @rrule : RRule
     @dtstart : DtStart
     @value : Time?
+    @index : Int32?
     @started = false
     @stopped = false
 
@@ -32,8 +33,9 @@ module RRule
       return stop if stopped?
 
       @started = true
-      new_value = next_value
+      new_value, new_index = next_value
       @value = new_value
+      @index = new_index
 
       if new_value.nil?
         @stopped = true
@@ -68,13 +70,30 @@ module RRule
 
     private def next_value
       value = @value
+      index = @index
       til = @rrule.til
+      count = @rrule.count
 
-      new_value = (value && increase_by_frequence(value)) || @dtstart.time.in(@dtstart.tzid)
+      new_value = nil
+      new_index = nil
 
-      return nil if til.try &.< new_value
+      if !value.nil? && !index.nil?
+        new_value = increase_by_frequence(value)
+        new_index = index + 1
+      else
+        new_value = @dtstart.time.in(@dtstart.tzid)
+        new_index = 0
+      end
 
-      new_value
+      if til.try &.< new_value
+        new_value = nil
+        new_index = nil
+      elsif count.try &.<(new_index + 1)
+        new_value = nil
+        new_index = nil
+      end
+
+      {new_value, new_index}
     end
   end
 end

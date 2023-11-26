@@ -169,10 +169,13 @@ describe RRule::RRuleSet do
   end
 
   describe "to_a" do
+    ny_location = Time::Location.load("America/New_York")
+
     cases = {
-      "DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z"  => [Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 11, 11, 0, 0)],
-      "DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY;UNTIL=20040201T050000Z" => [Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 17, 11, 0, 0), Time.utc(2004, 1, 24, 11, 0, 0), Time.utc(2004, 1, 31, 11, 0, 0)],
-      "DTSTART:20040131T110000Z\nRRULE:FREQ=MONTHLY;UNTIL=20040602T050000Z" => [Time.utc(2004, 1, 31, 11, 0, 0), Time.utc(2004, 3, 31, 11, 0, 0), Time.utc(2004, 5, 31, 11, 0, 0)],
+      "DTSTART:20040110T110000Z\nRRULE:FREQ=DAILY;UNTIL=20040112T050000Z"        => [Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 11, 11, 0, 0)],
+      "DTSTART:20040110T110000Z\nRRULE:FREQ=WEEKLY;UNTIL=20040201T050000Z"       => [Time.utc(2004, 1, 10, 11, 0, 0), Time.utc(2004, 1, 17, 11, 0, 0), Time.utc(2004, 1, 24, 11, 0, 0), Time.utc(2004, 1, 31, 11, 0, 0)],
+      "DTSTART:20040131T110000Z\nRRULE:FREQ=MONTHLY;UNTIL=20040602T050000Z"      => [Time.utc(2004, 1, 31, 11, 0, 0), Time.utc(2004, 3, 31, 11, 0, 0), Time.utc(2004, 5, 31, 11, 0, 0)],
+      "DTSTART;TZID=America/New_York:19970902T090000\nRRULE:FREQ=DAILY;COUNT=10" => (2..11).map { |day| Time.local(1997, 9, day, 9, 0, 0, location: ny_location) },
     }
 
     cases.each do |rrule_string, expected_array|
