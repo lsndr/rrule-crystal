@@ -52,9 +52,8 @@ module RRule
       # https://icalendar.org/iCalendar-RFC-5545/3-3-10-recurrence-rule.html
 
       new_time = time
-      interval = @rrule.interval || 1
 
-      interval.times do
+      @rrule.interval.times do
         case @rrule.freq
         when Frequency::DAILY
           new_time = new_time + 1.day

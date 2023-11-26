@@ -49,6 +49,14 @@ module RRule
       @wkst
     end
 
+    def interval
+      @interval || 1
+    end
+
+    def interval?
+      @interval
+    end
+
     def to_s(dtstart : DtStart)
       name = "RRULE"
       params = Hash(String, String).new
@@ -56,7 +64,7 @@ module RRule
 
       param_freq = freq
       param_til = til
-      param_interval = interval
+      param_interval = interval?
       param_count = count
       param_wkst = wkst?
       param_by_week_day = by_week_day

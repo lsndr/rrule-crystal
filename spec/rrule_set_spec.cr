@@ -121,7 +121,7 @@ rrule_set_to_string = {
 }
 
 describe RRule::RRuleSet do
-  describe "initialize" do
+  describe "self.new" do
     it "should initialize" do
       dtstart = RRule::DtStart.new(
         time: Time.utc(2004, 1, 10, 11, 0, 0)
@@ -141,7 +141,8 @@ describe RRule::RRuleSet do
       rrule_set.dtstart.tzid?.should eq(nil)
       rrule_set.rrules.size.should eq(1)
       rrule_set.rrules[0].freq.should eq(RRule::Frequency::DAILY)
-      rrule_set.rrules[0].interval.should eq(nil)
+      rrule_set.rrules[0].interval.should eq(1)
+      rrule_set.rrules[0].interval?.should eq(nil)
       rrule_set.rrules[0].wkst.should eq(RRule::Weekday::MO)
       rrule_set.rrules[0].wkst?.should eq(nil)
       rrule_set.rrules[0].count.should eq(nil)
@@ -198,6 +199,7 @@ describe RRule::RRuleSet do
         Time.local(2000, 3, 20, 9, 0, 0, location: ny_location),
         Time.local(2000, 3, 30, 9, 0, 0, location: ny_location),
       ],
+      # TODO: "DTSTART;TZID=America/New_York:19970610T090000\nRRULE:FREQ=YEARLY;COUNT=10;BYMONTH=1,2" => [] of Time,
     }
 
     cases.each do |rrule_string, expected_array|
