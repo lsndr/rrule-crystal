@@ -15,8 +15,7 @@ module RRule::Parser::Helpers
       second = (match[6].lstrip('0').presence || "0").to_i
       utc = (match[7].try &.upcase) == "Z"
 
-      # TODO: Think about narrowing exception type
-      raise Exception.new("Provided TZID doesn't correlate with provided time format") unless location.utc? == utc
+      location = Time::Location::UTC if utc
 
       return Time.local(year, month, day, hour, minute, second, location: location)
     else
