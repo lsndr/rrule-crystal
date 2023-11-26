@@ -1,8 +1,8 @@
-require "./rrule_set"
-require "./frequency"
-require "./weekday"
+require "../dtstart"
+require "../frequency"
+require "../weekday"
 
-module RRule
+module RRule::Iterators
   class RRuleIterator
     include Iterator(Time)
 

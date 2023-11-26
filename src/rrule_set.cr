@@ -1,4 +1,4 @@
-require "./rrule_set_iterator"
+require "./iterators/rrule_set_iterator"
 require "./dtstart"
 
 module RRule
@@ -27,7 +27,7 @@ module RRule
     end
 
     def each(&)
-      iterator = RRuleSetIterator.new(self)
+      iterator = Iterators::RRuleSetIterator.new(self)
 
       iterator.each do |time|
         yield time
