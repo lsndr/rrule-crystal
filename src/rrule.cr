@@ -10,7 +10,7 @@ module RRule
     property wkst : Weekday?
     property count : Int32?
     property til : Time?
-    property by_week_day : Array(Weekday)
+    property by_day : Array(Weekday)
     property by_month : Array(Int32)
     property by_set_pos : Array(Int32)
     property by_month_day : Array(Int32)
@@ -30,7 +30,7 @@ module RRule
       @count = nil,
       @til = nil,
       @by_month = [] of Int32,
-      @by_week_day = [] of Weekday,
+      @by_day = [] of Weekday,
       @by_set_pos = [] of Int32,
       @by_month_day = [] of Int32,
       @by_year_day = [] of Int32,
@@ -67,7 +67,7 @@ module RRule
       param_interval = interval?
       param_count = count
       param_wkst = wkst?
-      param_by_week_day = by_week_day
+      param_by_day = by_day
       param_by_month = by_month
       param_by_set_pos = by_set_pos
       param_by_month_day = by_month_day
@@ -82,7 +82,7 @@ module RRule
       value["INTERVAL"] = param_interval.to_s unless param_interval.nil?
       value["COUNT"] = param_count.to_s unless param_count.nil?
       value["WKST"] = param_wkst.to_s unless param_wkst.nil?
-      value["BYWEEKDAY"] = param_by_week_day.join(',') unless param_by_week_day.empty?
+      value["BYDAY"] = param_by_day.join(',') unless param_by_day.empty?
       value["BYMONTH"] = param_by_month.join(',') unless param_by_month.empty?
       value["BYSETPOS"] = param_by_set_pos.join(',') unless param_by_set_pos.empty?
       value["BYMONTHDAY"] = by_month_day.join(',') unless by_month_day.empty?
@@ -107,7 +107,7 @@ module RRule
         wkst? == rrule.wkst? &&
         count == rrule.count &&
         til == rrule.til &&
-        by_week_day == rrule.by_week_day &&
+        by_day == rrule.by_day &&
         by_month == rrule.by_month &&
         by_set_pos == rrule.by_set_pos &&
         by_month_day == rrule.by_month_day &&
@@ -131,7 +131,7 @@ module RRule
       interval = value["INTERVAL"]? && value["INTERVAL"].to_i
       count = value["COUNT"]? && value["COUNT"].to_i
       wkst = value["WKST"]? && Weekday.parse(value["WKST"])
-      by_week_day = value["BYWEEKDAY"]? && Parser::Helpers.parse_array_of_weekdays(value["BYWEEKDAY"])
+      by_day = value["BYDAY"]? && Parser::Helpers.parse_array_of_weekdays(value["BYDAY"])
       by_month = value["BYMONTH"]? && Parser::Helpers.parse_array_of_int32(value["BYMONTH"])
       by_set_pos = value["BYSETPOS"]? && Parser::Helpers.parse_array_of_int32(value["BYSETPOS"])
       by_month_day = value["BYMONTHDAY"]? && Parser::Helpers.parse_array_of_int32(value["BYMONTHDAY"])
@@ -147,7 +147,7 @@ module RRule
         interval: interval,
         count: count,
         wkst: wkst,
-        by_week_day: by_week_day || [] of Weekday,
+        by_day: by_day || [] of Weekday,
         by_month: by_month || [] of Int32,
         by_set_pos: by_set_pos || [] of Int32,
         by_month_day: by_month_day || [] of Int32,

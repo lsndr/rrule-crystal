@@ -54,10 +54,10 @@ rrule_set_to_string = {
       RRule::RRule.new(
         freq: RRule::Frequency::MONTHLY,
         wkst: RRule::Weekday::SU,
-        by_week_day: [RRule::Weekday::MO, RRule::Weekday::SU]
+        by_day: [RRule::Weekday::MO, RRule::Weekday::SU]
       ),
     ]
-  ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=MONTHLY;WKST=SU;BYWEEKDAY=MO,SU",
+  ) => "DTSTART:20030110T110000Z\nRRULE:FREQ=MONTHLY;WKST=SU;BYDAY=MO,SU",
   RRule::RRuleSet.new(
     dtstart: RRule::DtStart.new(Time.utc(2003, 1, 10, 11, 0, 0)),
     rrules: [
@@ -149,7 +149,7 @@ describe RRule::RRuleSet do
       rrule_set.rrules[0].til.should eq(nil)
       rrule_set.rrules[0].by_month.should eq([] of Int8)
       rrule_set.rrules[0].by_set_pos.should eq([] of Int32)
-      rrule_set.rrules[0].by_week_day.should eq([] of RRule::Weekday)
+      rrule_set.rrules[0].by_day.should eq([] of RRule::Weekday)
       rrule_set.rrules[0].by_month_day.should eq([] of Int32)
       rrule_set.rrules[0].by_year_day.should eq([] of Int32)
       rrule_set.rrules[0].by_week_no.should eq([] of Int32)
