@@ -180,6 +180,8 @@ describe RRule::RRuleSet do
                                                                                                   (1..31).map { |day| Time.local(1997, 10, day, 9, 0, 0, location: ny_location) } +
                                                                                                   (1..30).map { |day| Time.local(1997, 11, day, 9, 0, 0, location: ny_location) } +
                                                                                                   (1..23).map { |day| Time.local(1997, 12, day, 9, 0, 0, location: ny_location) },
+      "DTSTART;TZID=America/New_York:19970902T090000\nRRULE:FREQ=DAILY;INTERVAL=10;COUNT=5" => [2, 12, 22].map { |day| Time.local(1997, 9, day, 9, 0, 0, location: ny_location) } +
+                                                                                               [2, 12].map { |day| Time.local(1997, 10, day, 9, 0, 0, location: ny_location) },
     }
 
     cases.each do |rrule_string, expected_array|

@@ -52,23 +52,26 @@ module RRule
       # https://icalendar.org/iCalendar-RFC-5545/3-3-10-recurrence-rule.html
 
       new_time = time
+      interval = @rrule.interval || 1
 
-      case @rrule.freq
-      when Frequency::DAILY
-        new_time = time + 1.day
-      when Frequency::WEEKLY
-        new_time = time + 1.week
-      when Frequency::MONTHLY
-        step = 1
+      interval.times do
+        case @rrule.freq
+        when Frequency::DAILY
+          new_time = new_time + 1.day
+        when Frequency::WEEKLY
+          new_time = new_time + 1.week
+        when Frequency::MONTHLY
+          step = 1
 
-        new_time = loop do
-          increased_time = time + Time::MonthSpan.new(step)
-          break increased_time if increased_time.day == time.day
+          new_time = loop do
+            increased_time = new_time + Time::MonthSpan.new(step)
+            break increased_time if increased_time.day == new_time.day
 
-          step += 1
+            step += 1
+          end
+        else
+          raise Exception.new("Not implemented")
         end
-      else
-        raise Exception.new("Not implemented")
       end
 
       Time.local(new_time.year, new_time.month, new_time.day, time.hour, new_time.minute, new_time.second, location: time.location)

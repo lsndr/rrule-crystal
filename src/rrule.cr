@@ -56,6 +56,7 @@ module RRule
 
       param_freq = freq
       param_til = til
+      param_interval = interval
       param_count = count
       param_wkst = wkst?
       param_by_week_day = by_week_day
@@ -70,6 +71,7 @@ module RRule
 
       value["FREQ"] = param_freq.to_s
       value["UNTIL"] = Parser::Helpers.format_time(param_til.in(dtstart.tzid)) unless param_til.nil?
+      value["INTERVAL"] = param_interval.to_s unless param_interval.nil?
       value["COUNT"] = param_count.to_s unless param_count.nil?
       value["WKST"] = param_wkst.to_s unless param_wkst.nil?
       value["BYWEEKDAY"] = param_by_week_day.join(',') unless param_by_week_day.empty?
@@ -118,6 +120,7 @@ module RRule
 
       freq = Frequency.parse(value["FREQ"])
       til = value["UNTIL"]? && Parser::Helpers.parse_time(value["UNTIL"], tzid)
+      interval = value["INTERVAL"]? && value["INTERVAL"].to_i
       count = value["COUNT"]? && value["COUNT"].to_i
       wkst = value["WKST"]? && Weekday.parse(value["WKST"])
       by_week_day = value["BYWEEKDAY"]? && Parser::Helpers.parse_array_of_weekdays(value["BYWEEKDAY"])
@@ -133,6 +136,7 @@ module RRule
       self.new(
         freq: freq,
         til: til,
+        interval: interval,
         count: count,
         wkst: wkst,
         by_week_day: by_week_day || [] of Weekday,
