@@ -46,26 +46,32 @@ module RRule
     end
 
     private def increase_by_frequence(time : Time)
+      # Recurrence rules may generate recurrence instances with an invalid date (e.g., February 30)
+      # or nonexistent local time (e.g., 1:30 AM on a day where the local time is moved forward by an hour at 1:00 AM).
+      # Such recurrence instances MUST be ignored and MUST NOT be counted as part of the recurrence set.
+      # https://icalendar.org/iCalendar-RFC-5545/3-3-10-recurrence-rule.html
+
+      new_time = time
+
       case @rrule.freq
       when Frequency::DAILY
-        time + 1.day
+        new_time = time + 1.day
       when Frequency::WEEKLY
-        time + 1.week
+        new_time = time + 1.week
       when Frequency::MONTHLY
         step = 1
-        # Recurrence rules may generate recurrence instances with an invalid date (e.g., February 30)
-        # or nonexistent local time (e.g., 1:30 AM on a day where the local time is moved forward by an hour at 1:00 AM).
-        # Such recurrence instances MUST be ignored and MUST NOT be counted as part of the recurrence set.
-        # https://icalendar.org/iCalendar-RFC-5545/3-3-10-recurrence-rule.html
-        loop do
+
+        new_time = loop do
           increased_time = time + Time::MonthSpan.new(step)
-          return increased_time if increased_time.day == time.day
+          break increased_time if increased_time.day == time.day
 
           step += 1
         end
       else
         raise Exception.new("Not implemented")
       end
+
+      Time.local(new_time.year, new_time.month, new_time.day, time.hour, new_time.minute, new_time.second, location: time.location)
     end
 
     private def next_value
